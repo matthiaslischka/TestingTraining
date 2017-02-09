@@ -1,28 +1,40 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Foerder.Services.Tests.TestDataBuilders;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace Foerder.Services.Tests
 {
     [TestClass]
     public class FoerderantragServiceIsAktivTests
     {
+        private const string ActiveState = "ActiveState";
+        private const string InactiveState = "InactiveState";
+        private const string DataSource = "SpecificDataSource";
         private FoerderantragService _service;
         private DateTime AnyStichtag { get; } = DateTime.Now;
-
+        
         [TestInitialize]
         public void Initialize()
         {
-            _service = new FoerderantragService();
+            var antragAufrechtStatusProviderMock = new Mock<IAntragAufrechtStatusProvider>();
+
+            antragAufrechtStatusProviderMock
+                .Setup(provider => provider.GetAntragAufrechtStatusList(DataSource))
+                .Returns(new List<string> {ActiveState});
+
+            _service = new FoerderantragService(antragAufrechtStatusProviderMock.Object);
         }
 
         [TestMethod]
-        public void WithoutBewilligung_ShouldConsiderStatesFromConfigByDataSourceAsAktiv()
+        public void WithoutBewilligungAndActiveState_ShouldBeActive()
         {
             var antrag = AFoerder.Antrag.WithoutBewilligung();
-            antrag.DataSource = "KVS";
-            antrag.Status = "in Bearb.";
+            antrag.DataSource = DataSource;
+            antrag.Status = ActiveState;
 
             // Act
             var isAktiv = _service.IsAktiv(antrag, AnyStichtag);
@@ -31,14 +43,38 @@ namespace Foerder.Services.Tests
         }
 
         [TestMethod]
-        public void WithoutBewilligung_ShouldConsiderStatesNotInConfigByDataSourceAsInaktiv()
+        public void WithoutBewilligungAndInactiveState_ShouldNotBeActive()
         {
             var antrag = AFoerder.Antrag.WithoutBewilligung();
-            antrag.DataSource = "KVS";
-            antrag.Status = "Not a state in config";
+            antrag.DataSource = DataSource;
+            antrag.Status = InactiveState;
 
             // Act
             var isAktiv = _service.IsAktiv(antrag, AnyStichtag);
+
+            isAktiv.Should().BeFalse();
+        }
+
+        [TestMethod]
+        public void WithoutFreigabeAndActiveState_ShouldBeActive()
+        {
+            var antragOhneFreigabe = AFoerder.Antrag.WithoutFreigabe();
+            antragOhneFreigabe.DataSource = DataSource;
+            antragOhneFreigabe.Status = ActiveState;
+
+            var isAktiv = _service.IsAktiv(antragOhneFreigabe, AnyStichtag);
+
+            isAktiv.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void WithoutFreigabeAndInactiveState_ShouldNotBeActive()
+        {
+            var antragOhneFreigabe = AFoerder.Antrag.WithoutFreigabe();
+            antragOhneFreigabe.DataSource = DataSource;
+            antragOhneFreigabe.Status = InactiveState;
+
+            var isAktiv = _service.IsAktiv(antragOhneFreigabe, AnyStichtag);
 
             isAktiv.Should().BeFalse();
         }

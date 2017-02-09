@@ -6,8 +6,31 @@ using Foerder.Domain;
 
 namespace Foerder.Services
 {
+
+    public interface IAntragAufrechtStatusProvider
+    {
+        List<string> GetAntragAufrechtStatusList(string dataSourceKey);
+    }
+
+    public class AntragAufrechtStatusProvider: IAntragAufrechtStatusProvider
+    {
+        public List<string> GetAntragAufrechtStatusList(string dataSourceKey)
+        {
+            var key = "StatusAntragAufrecht_" + dataSourceKey;
+            var value = ConfigurationManager.AppSettings[key];
+            return value?.Split(';').ToList();
+        }
+    }
+
     public class FoerderantragService
     {
+        private readonly IAntragAufrechtStatusProvider _antragAufrechtStatusProvider;
+
+        public FoerderantragService(IAntragAufrechtStatusProvider antragAufrechtStatusProvider)
+        {
+            _antragAufrechtStatusProvider = antragAufrechtStatusProvider;
+        }
+
         public bool IsAktiv(Foerderantrag antrag, DateTime stichtag)
         {
             if (antrag.Bewilligung?.Freigabe != null)
@@ -16,17 +39,9 @@ namespace Foerder.Services
                 return !freigabe.AufrechtBis.HasValue || (freigabe.AufrechtBis.Value >= stichtag);
             }
 
-            var filterKeyPerDataSource = "StatusAntragAufrecht_" + antrag.DataSource;
-            var statusAntragAufrecht = GetSemicolonSeparatedAppSetting(filterKeyPerDataSource);
+            var statusAntragAufrecht = _antragAufrechtStatusProvider.GetAntragAufrechtStatusList(antrag.DataSource);
             return (statusAntragAufrecht != null) &&
                     statusAntragAufrecht.Contains(antrag.Status ?? string.Empty);
-        }
-
-        private List<string> GetSemicolonSeparatedAppSetting(string key)
-        {
-            var value = ConfigurationManager.AppSettings[key];
-
-            return value?.Split(';').ToList();
         }
     }
 }

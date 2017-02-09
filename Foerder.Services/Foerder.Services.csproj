@@ -35,7 +35,6 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="OriginalCode\CodeFromMLI.cs" />
     <Compile Include="FoerderantragService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -44,6 +43,9 @@
       <Project>{2CD0B21F-00B2-456F-96C8-58222A6AA14A}</Project>
       <Name>Foerder.Domain</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

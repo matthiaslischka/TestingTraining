@@ -15,6 +15,15 @@ namespace Foerder.Services.Tests.TestDataBuilders
             return antrag;
         }
 
+        public Foerderantrag WithoutFreigabe()
+        {
+            var antrag = new Foerderantrag();
+
+            antrag.Bewilligung = new Foerderbewilligung {Freigabe = null};
+
+            return antrag;
+        }
+
         public Foerderantrag WithUnrestrictedFreigabe() => GetAntragWithFreigabe(null);
 
         public Foerderantrag WithFreigabeUntil(DateTime aufrechtBis) => GetAntragWithFreigabe(aufrechtBis);
