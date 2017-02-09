@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foerder.Domain", "Foerder.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foerder.Services", "Foerder.Services\Foerder.Services.csproj", "{DAFBDB1C-A69A-4550-AD71-C6A8F916FC27}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{99C882B1-66DB-4C20-8CCB-B5B7C1C00078}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Foerder.Services.Tests", "Foerder.Domain.Tests\Foerder.Services.Tests.csproj", "{C28A9AE4-E7ED-4FAE-887F-66E414C70964}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +25,15 @@ Global
 		{DAFBDB1C-A69A-4550-AD71-C6A8F916FC27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAFBDB1C-A69A-4550-AD71-C6A8F916FC27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAFBDB1C-A69A-4550-AD71-C6A8F916FC27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C28A9AE4-E7ED-4FAE-887F-66E414C70964}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C28A9AE4-E7ED-4FAE-887F-66E414C70964}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C28A9AE4-E7ED-4FAE-887F-66E414C70964}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C28A9AE4-E7ED-4FAE-887F-66E414C70964}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C28A9AE4-E7ED-4FAE-887F-66E414C70964} = {99C882B1-66DB-4C20-8CCB-B5B7C1C00078}
 	EndGlobalSection
 EndGlobal
