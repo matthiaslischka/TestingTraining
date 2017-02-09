@@ -14,10 +14,10 @@ namespace Foerder.Services
 
         public bool IsAktiv(Foerderantrag antrag, DateTime stichtag)
         {
-            if (antrag.Bewilligung?.Freigabe != null)
+            if (antrag.Bewilligung != null && antrag.Bewilligung.Freigabe == null)
             {
-                var freigabe = antrag.Bewilligung.Freigabe;
-                return !freigabe.AufrechtBis.HasValue || (freigabe.AufrechtBis.Value >= stichtag);
+                var befristungbBis = antrag.Bewilligung.BewilligtBis;
+                return !befristungbBis.HasValue || (befristungbBis.Value >= stichtag);
             }
 
             var statusAntragAufrecht = _configurationProvider.GetStatusAntragAufrechtByDataSource(antrag.DataSource);
